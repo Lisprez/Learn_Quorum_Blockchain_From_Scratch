@@ -137,34 +137,34 @@ Quorum作为企业级联盟链, 强调隐私控制与权限管理, Constellation
 
 1. 创建run_three_nodes.sh
 
->#!/bin/bash
->set -u
->set -e
+`>#!/bin/bash`
+`>set -u`
+`>set -e`
 
->GLOBAL_ARGS="--raft --rpc --rpcaddr 0.0.0.0 --rpcapi >admin,db,eth,debug,miner,net,shh,txpool,personal,web3,quorum --emitcheckpoints"
->nohup constellation-node tm1.conf 2>> qdata/logs/constellation1.log &
->sleep 2
+`GLOBAL_ARGS="--raft --rpc --rpcaddr 0.0.0.0 --rpcapi >admin,db,eth,debug,miner,net,shh,txpool,personal,web3,quorum --emitcheckpoints"`
+`nohup constellation-node tm1.conf 2>> qdata/logs/constellation1.log &`
+`sleep 2`
 
->nohup constellation-node tm2.conf 2>> qdata/logs/constellation2.log &
-sleep 2
+`nohup constellation-node tm2.conf 2>> qdata/logs/constellation2.log &`
+`sleep 2`
 
->nohup constellation-node tm3.conf 2>> qdata/logs/constellation3.log &
-sleep 2
+`nohup constellation-node tm3.conf 2>> qdata/logs/constellation3.log &`
+`sleep 2`
 
->PRIVATE_CONFIG=tm1.conf nohup geth --datadir qdata/node1 $GLOBAL_ARGS --permissioned --raftport 50401 --rpcport 22000 --port 21000 --unlock 0 --password passwords.txt 2>>qdata/logs/1.log &
+`PRIVATE_CONFIG=tm1.conf nohup geth --datadir qdata/node1 $GLOBAL_ARGS --permissioned --raftport 50401 --rpcport 22000 --port 21000 --unlock 0 --password passwords.txt 2>>qdata/logs/1.log &`
 
->PRIVATE_CONFIG=tm2.conf nohup geth --datadir qdata/node2 $GLOBAL_ARGS --permissioned --raftport 50402 --rpcport 22001 --port 21001 --unlock 0 --password passwords.txt 2>>qdata/logs/2.log &
+`PRIVATE_CONFIG=tm2.conf nohup geth --datadir qdata/node2 $GLOBAL_ARGS --permissioned --raftport 50402 --rpcport 22001 --port 21001 --unlock 0 --password passwords.txt 2>>qdata/logs/2.log &`
 
->PRIVATE_CONFIG=tm3.conf nohup geth --datadir qdata/node3 $GLOBAL_ARGS --permissioned --raftport 50403 --rpcport 22002 --port 21002 --unlock 0 --password passwords.txt 2>>qdata/logs/3.log &
+`PRIVATE_CONFIG=tm3.conf nohup geth --datadir qdata/node3 $GLOBAL_ARGS --permissioned --raftport 50403 --rpcport 22002 --port 21002 --unlock 0 --password passwords.txt 2>>qdata/logs/3.log &`
 
 注:以上创建的3个账号使用的是相同的密码
 2. 创建stop.sh
 
-`#!/bin/bash
+`#!/bin/bash`
 
-killall geth
+`killall geth`
 
-killall constellation-node`
+`killall constellation-node`
 
 3. 运行run_three_nodes.sh
 
