@@ -160,9 +160,11 @@ sleep 2
 注:以上创建的3个账号使用的是相同的密码
 2. 创建stop.sh
 
-> #!/bin/bash
->killall geth
->killall constellation-node
+`#!/bin/bash
+
+killall geth
+
+killall constellation-node`
 
 3. 运行run_three_nodes.sh
 
