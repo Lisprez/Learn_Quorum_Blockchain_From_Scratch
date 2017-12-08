@@ -169,3 +169,8 @@ Quorum作为企业级联盟链, 强调隐私控制与权限管理, Constellation
 3. 运行run_three_nodes.sh
 ![A](https://github.com/Lispre/Learn_Quorum_Blockchain_From_Scratch/blob/master/AAAA.png)
 ![B](https://github.com/Lispre/Learn_Quorum_Blockchain_From_Scratch/blob/master/BBBB.png)
+
+## 总结 ##
+通过上述际操作, 相信你应该也已经在本地将3个结点的Quorum网络跑起来了!
+
+*Next: 下一篇计划写的内容内容就是实际智能合约的操作,重点关注权限与私有交易的处理*
