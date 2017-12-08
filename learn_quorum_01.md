@@ -167,4 +167,5 @@ Quorum作为企业级联盟链, 强调隐私控制与权限管理, Constellation
 `killall constellation-node`
 
 3. 运行run_three_nodes.sh
-
+![A](https://github.com/Lispre/Learn_Quorum_Blockchain_From_Scratch/blob/master/AAAA.png)
+![B](https://github.com/Lispre/Learn_Quorum_Blockchain_From_Scratch/blob/master/AAAA.png)
