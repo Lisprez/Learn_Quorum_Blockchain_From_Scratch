@@ -58,7 +58,7 @@ Quorum作为企业级联盟链, 强调隐私控制与权限管理, Constellation
 
 	解压之后解压得到的文件constellation-node, 执行第3步同样的操作将constellation-node添到系统PATH中去
 
-*注: 完成第4步的操作之后, 本地结点所需要的二进制可执行文件已经准备完成, 下面就生成配置文件.*
+*注: 完成第4步的操作之后, 本地结点所需要的二进制可执行文件已经准备完成, 下面的任务是生成运行本地结点所需要的配置文件.*
 
 #### 生成启动本地结点的配置文件 ####
 
@@ -90,3 +90,81 @@ Quorum作为企业级联盟链, 强调隐私控制与权限管理, Constellation
 	  "parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
 	  "timestamp": "0x00"
 	}`
+	
+	*注: 对于此配置文件各字段的具体解释将在后续系列中加以剖析*
+
+3. 创建结点运行时存放数据的目录树
+
+    `mkdir -p qdata/logs`
+
+	`mkdir -p qdata/node1/keystore`
+
+	`mkdir -p qdata/node1/geth`
+
+	`mkdir -p qdata/node1/keys`
+
+4. 创建一个account
+
+    `cd qdata/node1/keystore`
+
+	`geth account new --keystore .`
+
+	`重命名生成的以UTC开头的文件为key_file1`
+
+	`keyfetcher key_file1 <这里输入你的生成账号时的password>`
+
+	`在输出中就可以得到账号的raw private_key, nodeid`
+
+	`echo private_key > ../geth/nodekey`
+	
+	`将nodeid存入static-nodes.json文件中去, 形式如下:`
+
+	["enode://db59ca2bb693ea395e0f7e623e085f37465c85b77b7ff4835ab40b9c63b93177080f260b33636b7dae5212fa7d48cda69bf9f2be75e8b6163d17667b3bb8757a@127.0.0.1:21000?discport=0&raftport=50401",
+	"enode://9294c4eeb74271f6a28ae2c8bccf6ba360bf52b6182bda9869e4f54251583a03254f8eab318a2effc3155d73391159a5525961893e5a6d8379df91f71158a0ec@127.0.0.1:21001?discport=0&raftport=50402",
+	"enode://4ce71e5cc27b935ea60e12e9bc8d2545491e0c9a1759ea4f8f4aeabd361cd22167559cfe44310ecc94b328181dc85ac901b6abb8d5adc6e592b96c88e231745f@127.0.0.1:21002?discport=0&raftport=50403"]
+
+	`copy static-nodes.json permissoned-nodes.json`
+
+5. 重复3和4创建另外两个结点node2, node3
+	
+	`geth --datadir qdata/node1 init genesis.json`
+
+	`geth --datadir qdata/node2 init genesis.json`
+
+	`geth --datadir qdata/node3 init genesis.json`
+
+#### 启动本地单结点 ####
+
+1. 创建run_three_nodes.sh
+
+>#!/bin/bash
+>set -u
+>set -e
+
+>GLOBAL_ARGS="--raft --rpc --rpcaddr 0.0.0.0 --rpcapi >admin,db,eth,debug,miner,net,shh,txpool,personal,web3,quorum --emitcheckpoints"
+>nohup constellation-node tm1.conf 2>> qdata/logs/constellation1.log &
+>sleep 2
+
+>nohup constellation-node tm2.conf 2>> qdata/logs/constellation2.log &
+sleep 2
+
+>nohup constellation-node tm3.conf 2>> qdata/logs/constellation3.log &
+sleep 2
+
+>PRIVATE_CONFIG=tm1.conf nohup geth --datadir qdata/node1 $GLOBAL_ARGS --permissioned --raftport 50401 --rpcport 22000 --port 21000 --unlock 0 --password passwords.txt 2>>qdata/logs/1.log &
+
+>PRIVATE_CONFIG=tm2.conf nohup geth --datadir qdata/node2 $GLOBAL_ARGS --permissioned --raftport 50402 --rpcport 22001 --port 21001 --unlock 0 --password passwords.txt 2>>qdata/logs/2.log &
+
+>PRIVATE_CONFIG=tm3.conf nohup geth --datadir qdata/node3 $GLOBAL_ARGS --permissioned --raftport 50403 --rpcport 22002 --port 21002 --unlock 0 --password passwords.txt 2>>qdata/logs/3.log &
+
+注:以上创建的3个账号使用的是相同的密码
+2. 创建stop.sh
+
+> #!/bin/bash
+
+>killall geth
+>
+>killall constellation-node
+
+3. 运行run_three_nodes.sh
+
