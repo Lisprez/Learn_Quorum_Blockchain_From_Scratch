@@ -161,9 +161,7 @@ sleep 2
 2. 创建stop.sh
 
 > #!/bin/bash
-
 >killall geth
->
 >killall constellation-node
 
 3. 运行run_three_nodes.sh
